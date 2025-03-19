@@ -81,7 +81,7 @@ export function LeituraList() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
@@ -92,48 +92,54 @@ export function LeituraList() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center space-x-2">
-          <input
-            type="date"
-            className="px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-          <input
-            type="date"
-            className="px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <button
-            onClick={() => setViewMode("table")}
-            className={`p-2 rounded-md ${
-              viewMode === "table"
-                ? "bg-green-100 text-green-600"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-            title="Visualização em tabela"
-          >
-            <Table className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setViewMode("graph")}
-            className={`p-2 rounded-md ${
-              viewMode === "graph"
-                ? "bg-green-100 text-green-600"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-            title="Visualização em gráfico"
-          >
-            <BarChart2 className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setShowForm(true)}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
-          >
-            <Plus className="w-4 h-4" />{" "}
-            <span className="ml-2 hidden sm:inline">Nova Leitura</span>
-          </button>
+        <div className="flex flex-col md:flex-row items-center space-x-2 justify-center">
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 items-center md:space-x-2 mb-2 md:mb-0">
+            <input
+              type="date"
+              className="px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+              value={startDate}
+              placeholder="Data Inicial"
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <input
+              type="date"
+              className="px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+              value={endDate}
+              placeholder="Data Final"
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setViewMode("table")}
+              className={`p-2 rounded-md ${
+                viewMode === "table"
+                  ? "bg-green-100 text-green-600"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
+              title="Visualização em tabela"
+            >
+              <Table className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setViewMode("graph")}
+              className={`p-2 rounded-md ${
+                viewMode === "graph"
+                  ? "bg-green-100 text-green-600"
+                  : "text-gray-600 hover:bg-gray-100"
+              }`}
+              title="Visualização em gráfico"
+            >
+              <BarChart2 className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+            >
+              <Plus className="w-4 h-4" />{" "}
+              <span className="ml-2 hidden sm:inline">Nova Leitura</span>
+            </button>
+          </div>
         </div>
       </div>
 
