@@ -21,6 +21,12 @@ jobs:
         with:
           node-version: 18
 
+      - name: Navigate to api directory
+        working-directory: ./api
+        run: |
+          echo "Diretório atual: $(pwd)"
+          ls -la
+
       - name: Cache npm dependencies
         uses: actions/cache@v3
         with:
@@ -29,11 +35,10 @@ jobs:
           restore-keys: |
             npm-${{ runner.os }}-
 
-      - name: Navigate to api directory
-        run: cd api
-
       - name: Install dependencies
+        working-directory: ./api
         run: npm install
 
       - name: Run tests
+        working-directory: ./api
         run: npm test
