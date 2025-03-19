@@ -2,46 +2,33 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:13
     container_name: postgres_db
-    restart: always
     environment:
-      POSTGRES_USER: usuario
-      POSTGRES_PASSWORD: senha
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
       POSTGRES_DB: leituras_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U usuario -d leituras_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
-  backend:
-    build:
-      context: ./api          # Define o diretório onde o Dockerfile está localizado
-      dockerfile: Dockerfile  # Define explicitamente o nome do Dockerfile
-    container_name: node_backend
-    restart: always
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: usuario
-      DB_PASSWORD: senha
-      DB_NAME: leituras_db
+  api:
+    build: ./api
+    container_name: api_container
     ports:
       - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: leituras_db
+      DB_PORT: 5432
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     volumes:
-      - ./api:/usr/src/app    # Mapeia o código da pasta /api para o contêiner
-      - /usr/src/app/node_modules # Mantém node_modules isolado
-    working_dir: /usr/src/app
-    command: ["sh", "-c", "npm install && npm run dev"]
+      - ./api:/app
+      - /app/node_modules
 
 volumes:
   postgres_data:
-    driver: local
