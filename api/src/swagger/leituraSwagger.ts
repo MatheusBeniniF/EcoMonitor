@@ -1,5 +1,3 @@
-// src/swagger/leituraSwagger.ts
-
 /**
  * @swagger
  * /leituras:
