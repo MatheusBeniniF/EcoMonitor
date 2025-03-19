@@ -12,6 +12,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres_db_test:
+        image: postgres:13
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: leituras_db_test
+        ports:
+          - 5430:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -41,4 +52,10 @@ jobs:
 
       - name: Run tests
         working-directory: ./api
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5430
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_NAME: leituras_db_test
         run: npm test
