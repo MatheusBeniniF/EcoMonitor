@@ -42,7 +42,8 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
     inputClass:
       "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500",
     labelClass: "block text-sm font-medium text-gray-700",
-    iconClass: "w-4 h-4 mr-2",
+    iconClass: "w-4 h-4",
+    buttonClass: "ml-2 hidden sm:inline",
   };
 
   return (
@@ -94,6 +95,7 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
         <input
           type="number"
           step="0.01"
+          min="0"
           required
           className={classes.inputClass}
           value={formData.valor}
@@ -123,7 +125,7 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
           className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
         >
           <X className={classes.iconClass} />
-          Cancelar
+          <span className={classes.buttonClass}>Cancelar</span>
         </button>
         <button
           type="submit"
@@ -131,7 +133,9 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
           className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700"
         >
           <Save className={classes.iconClass} />
-          {mutation.isPending ? "Salvando..." : "Salvar"}
+          <span className={classes.buttonClass}>
+            {mutation.isPending ? "Salvando..." : "Salvar"}
+          </span>
         </button>
       </div>
     </form>

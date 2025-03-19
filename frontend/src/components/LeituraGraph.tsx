@@ -56,8 +56,8 @@ export function LeituraGraph({ leituras }: LeituraGraphProps) {
   };
 
   const metricas = useMemo(() => {
-    return Array.from(new Set(leituras.map((l) => l.tipo)));
-  }, [leituras]);
+    return Array.from(new Set(filteredData.map((l) => l.tipo)));
+  }, [filteredData]);
 
   return (
     <div className="bg-white rounded-lg shadow p-6 space-y-4">

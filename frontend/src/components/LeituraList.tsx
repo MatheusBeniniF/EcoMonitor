@@ -14,6 +14,8 @@ export function LeituraList() {
   const [showForm, setShowForm] = useState(false);
   const [editingLeitura, setEditingLeitura] = useState<Leitura | undefined>();
   const [viewMode, setViewMode] = useState<"table" | "graph">("table");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   const queryClient = useQueryClient();
   const { data: leituras = [], isLoading } = useQuery({
@@ -32,11 +34,21 @@ export function LeituraList() {
     },
   });
 
-  const filteredLeituras = leituras.filter(
-    (leitura) =>
+  const filteredLeituras = leituras.filter((leitura) => {
+    const leituraDate = new Date(leitura.data_hora).getTime();
+
+    // Verifica se a leitura está dentro do intervalo de datas
+    const isWithinDateRange =
+      (!startDate || leituraDate >= new Date(startDate).getTime()) &&
+      (!endDate || leituraDate <= new Date(endDate).getTime());
+
+    // Verifica se a leitura corresponde ao termo de busca
+    const matchesSearch =
       leitura.local.toLowerCase().includes(search.toLowerCase()) ||
-      leitura.tipo.toLowerCase().includes(search.toLowerCase())
-  );
+      leitura.tipo.toLowerCase().includes(search.toLowerCase());
+
+    return isWithinDateRange && matchesSearch;
+  });
 
   const handleEdit = (leitura: Leitura) => {
     setEditingLeitura(leitura);
@@ -52,6 +64,11 @@ export function LeituraList() {
   const handleCloseForm = () => {
     setShowForm(false);
     setEditingLeitura(undefined);
+  };
+
+  const classes = {
+    th: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+    td: "px-6 py-4 whitespace-nowrap",
   };
 
   if (isLoading) {
@@ -70,12 +87,24 @@ export function LeituraList() {
           <input
             type="text"
             placeholder="Buscar por local ou tipo de métrica..."
-            className="pl-10 w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            className="pl-10 py-3 pr-3 w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div className="flex items-center space-x-2">
+          <input
+            type="date"
+            className="px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="date"
+            className="px-3 py-2 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
           <button
             onClick={() => setViewMode("table")}
             className={`p-2 rounded-md ${
@@ -102,8 +131,8 @@ export function LeituraList() {
             onClick={() => setShowForm(true)}
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Nova Leitura
+            <Plus className="w-4 h-4" />{" "}
+            <span className="ml-2 hidden sm:inline">Nova Leitura</span>
           </button>
         </div>
       </div>
@@ -119,48 +148,38 @@ export function LeituraList() {
         </div>
       )}
 
-      {viewMode === "graph" ? (
+      {filteredLeituras.length === 0 ? (
+        <div className="text-center py-6 text-gray-500">
+          Nenhuma leitura encontrada no intervalo de datas selecionado.
+        </div>
+      ) : viewMode === "graph" ? (
         <LeituraGraph leituras={filteredLeituras} />
       ) : (
         <div className="overflow-x-auto bg-white rounded-lg shadow">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Local
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Data/Hora
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Métrica
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Valor
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ações
-                </th>
+                <th className={classes.th}>Local</th>
+                <th className={classes.th}>Data/Hora</th>
+                <th className={classes.th}>Métrica</th>
+                <th className={classes.th}>Valor</th>
+                <th className={classes.th}>Ações</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredLeituras.map((leitura) => (
                 <tr key={leitura.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {leitura.local}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className={classes.td}>{leitura.local}</td>
+                  <td className={classes.td}>
                     {format(new Date(leitura.data_hora), "dd/MM/yyyy HH:mm", {
                       locale: ptBR,
                     })}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {leitura.tipo}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className={classes.td}>{leitura.tipo}</td>
+                  <td className={classes.td}>
                     {leitura.valor} {leitura.unidade}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className={classes.td}>
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleEdit(leitura)}
