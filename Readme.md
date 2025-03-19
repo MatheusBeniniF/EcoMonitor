@@ -22,8 +22,8 @@ Esta é uma API RESTful desenvolvida em Node.js com Express e Sequelize, projeta
 1. **Clone o repositório**
 
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
-   cd seu-repositorio
+   git clone git@github.com:seu-usuario/EcoMonitor.git
+   cd EcoMonitor
    ```
 
 2. **Configure o ambiente**

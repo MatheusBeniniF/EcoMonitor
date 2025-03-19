@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Leitura } = require("../models");
+const {
+  getAllLeituras,
+  getLeituraById,
+  createLeitura,
+  updateLeitura,
+  deleteLeitura,
+} = require("../controllers/leitura");
 
 /**
  * @swagger
@@ -17,12 +23,7 @@ const { Leitura } = require("../models");
  *       200:
  *         description: Lista de leituras
  */
-router.get("/", async (req, res) => {
-  const { local } = req.query;
-  const where = local ? { local } : {};
-  const leituras = await Leitura.findAll({ where });
-  res.json(leituras);
-});
+router.get("/", getAllLeituras);
 
 /**
  * @swagger
@@ -42,14 +43,7 @@ router.get("/", async (req, res) => {
  *       404:
  *         description: Leitura não encontrada
  */
-router.get("/:id", async (req, res) => {
-  const leitura = await Leitura.findByPk(req.params.id);
-  if (leitura) {
-    res.json(leitura);
-  } else {
-    res.status(404).json({ message: "Leitura não encontrada" });
-  }
-});
+router.get("/:id", getLeituraById);
 
 /**
  * @swagger
@@ -78,14 +72,7 @@ router.get("/:id", async (req, res) => {
  *       400:
  *         description: Erro ao criar leitura
  */
-router.post("/", async (req, res) => {
-  try {
-    const leitura = await Leitura.create(req.body);
-    res.status(201).json(leitura);
-  } catch (error) {
-    res.status(400).json({ message: "Erro ao criar leitura", error });
-  }
-});
+router.post("/", createLeitura);
 
 /**
  * @swagger
@@ -123,21 +110,7 @@ router.post("/", async (req, res) => {
  *       400:
  *         description: Erro ao atualizar leitura
  */
-router.put("/:id", async (req, res) => {
-  try {
-    const [updated] = await Leitura.update(req.body, {
-      where: { id: req.params.id },
-    });
-    if (updated) {
-      const updatedLeitura = await Leitura.findByPk(req.params.id);
-      res.status(200).json(updatedLeitura);
-    } else {
-      res.status(404).json({ message: "Leitura não encontrada" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: "Erro ao atualizar leitura", error });
-  }
-});
+router.put("/:id", updateLeitura);
 
 /**
  * @swagger
@@ -157,15 +130,6 @@ router.put("/:id", async (req, res) => {
  *       404:
  *         description: Leitura não encontrada
  */
-router.delete("/:id", async (req, res) => {
-  const deleted = await Leitura.destroy({
-    where: { id: req.params.id },
-  });
-  if (deleted) {
-    res.status(204).send();
-  } else {
-    res.status(404).json({ message: "Leitura não encontrada" });
-  }
-});
+router.delete("/:id", deleteLeitura);
 
 module.exports = router;
