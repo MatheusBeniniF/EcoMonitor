@@ -52,7 +52,24 @@ Esta é uma API RESTful desenvolvida em Node.js com Express e Sequelize, projeta
    - Subir o contêiner do PostgreSQL.
    - Executar as migrações e seeders.
 
-4. **Acesse a API**
+4. **Instale as dependências do frontend**
+
+   Navegue até o diretório `frontend` e instale as dependências:
+
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+5. **Execute o frontend**
+
+   Ainda no diretório `frontend`, execute:
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Acesse a API**
 
    A API estará disponível em: [http://localhost:3000/api](http://localhost:3000/api)
 
@@ -113,3 +130,4 @@ docker exec -it api_container npm test
 ## 📝 Documentação da API
 
 A documentação da API foi criada usando Swagger. Para acessar a interface interativa, abra o navegador e visite: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+
