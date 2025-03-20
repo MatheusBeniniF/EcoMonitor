@@ -7,7 +7,24 @@ import { Leitura } from "../types";
 import { LeituraForm } from "./LeituraForm";
 import { LeituraGraph } from "./LeituraGraph";
 import { toast } from "react-hot-toast";
-import { Edit, Trash2, Plus, Search, BarChart2, Table } from "lucide-react";
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Search,
+  BarChart2,
+  Table,
+  X,
+  Check,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 
 export function LeituraList() {
   const [search, setSearch] = useState("");
@@ -16,6 +33,7 @@ export function LeituraList() {
   const [viewMode, setViewMode] = useState<"table" | "graph">("table");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
   const { data: leituras = [], isLoading } = useQuery({
@@ -37,12 +55,10 @@ export function LeituraList() {
   const filteredLeituras = leituras.filter((leitura) => {
     const leituraDate = new Date(leitura.data_hora).getTime();
 
-    // Verifica se a leitura está dentro do intervalo de datas
     const isWithinDateRange =
       (!startDate || leituraDate >= new Date(startDate).getTime()) &&
       (!endDate || leituraDate <= new Date(endDate).getTime());
 
-    // Verifica se a leitura corresponde ao termo de busca
     const matchesSearch =
       leitura.local.toLowerCase().includes(search.toLowerCase()) ||
       leitura.tipo.toLowerCase().includes(search.toLowerCase());
@@ -56,8 +72,13 @@ export function LeituraList() {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm("Tem certeza que deseja excluir esta leitura?")) {
-      deleteMutation.mutate(id);
+    setDeleteId(id); // Abre o modal de confirmação
+  };
+
+  const handleDeleteConfirm = () => {
+    if (deleteId) {
+      deleteMutation.mutate(deleteId);
+      setDeleteId(null); // Fecha o modal após deletar
     }
   };
 
@@ -69,6 +90,9 @@ export function LeituraList() {
   const classes = {
     th: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
     td: "px-6 py-4 whitespace-nowrap",
+    actions: "flex items-center space-x-2",
+    icon: "w-4 h-4",
+    button: "hidden sm:inline",
   };
 
   if (isLoading) {
@@ -136,7 +160,7 @@ export function LeituraList() {
               onClick={() => setShowForm(true)}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
             >
-              <Plus className="w-4 h-4" />{" "}
+              <Plus className="w-4 h-4" />
               <span className="ml-2 hidden sm:inline">Nova Leitura</span>
             </button>
           </div>
@@ -144,14 +168,8 @@ export function LeituraList() {
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-lg font-medium mb-4">
-              {editingLeitura ? "Editar Leitura" : "Nova Leitura"}
-            </h2>
-            <LeituraForm leitura={editingLeitura} onClose={handleCloseForm} />
-          </div>
-        </div>
+        //
+        <LeituraForm leitura={editingLeitura} onClose={handleCloseForm} />
       )}
 
       {filteredLeituras.length === 0 ? (
@@ -207,6 +225,29 @@ export function LeituraList() {
           </table>
         </div>
       )}
+
+      <Dialog open={!!deleteId} onClose={() => setDeleteId(null)}>
+        <DialogTitle>Confirmar Exclusão</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Tem certeza que deseja excluir esta leitura?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteId(null)} color="error">
+            <div className={classes.actions}>
+              <X className={classes.icon} />
+              <span className={classes.button}>Cancelar</span>
+            </div>
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="primary">
+            <div className={classes.actions}>
+              <Check className={classes.icon} />
+              <span className={classes.button}>Confirmar</span>
+            </div>
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
