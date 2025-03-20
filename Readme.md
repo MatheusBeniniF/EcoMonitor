@@ -120,11 +120,16 @@ Esta é uma API RESTful desenvolvida em Node.js com Express e Sequelize, projeta
   ```
 
 ## 🧪 Testes
-
-Para executar os testes automatizados, utilize o comando:
+Para executar os testes automatizados do backend, utilize o comando:
 
 ```bash
 docker exec -it api_container npm test
+```
+
+Para executar os testes automatizados do backend, utilize o comando:
+
+```bash
+npm test
 ```
 
 ## 📝 Documentação da API
