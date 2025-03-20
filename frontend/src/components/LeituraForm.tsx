@@ -49,19 +49,26 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className={classes.labelClass}>Local</label>
+        <label className={classes.labelClass} id="local-label">
+          Local
+        </label>
         <input
+          id="local"
           type="text"
           required
           className={classes.inputClass}
           value={formData.local}
           onChange={(e) => setFormData({ ...formData, local: e.target.value })}
+          aria-labelledby="local-label"
         />
       </div>
 
       <div>
-        <label className={classes.labelClass}>Data e Hora</label>
+        <label className={classes.labelClass} id="data-hora-label">
+          Data e Hora
+        </label>
         <input
+          id="data-hora"
           type="datetime-local"
           required
           className={classes.inputClass}
@@ -69,12 +76,16 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, data_hora: e.target.value })
           }
+          aria-labelledby="data-hora-label"
         />
       </div>
 
       <div>
-        <label className={classes.labelClass}>Tipo de Métrica</label>
+        <label className={classes.labelClass} id="tipo-label">
+          Tipo de Métrica
+        </label>
         <select
+          id="tipo"
           className={classes.inputClass}
           value={formData.tipo}
           onChange={(e) =>
@@ -83,6 +94,7 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
               tipo: e.target.value as LeituraInput["tipo"],
             })
           }
+          aria-labelledby="tipo-label"
         >
           <option value="PM2.5">PM2.5</option>
           <option value="CO2">CO2</option>
@@ -91,8 +103,11 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
       </div>
 
       <div>
-        <label className={classes.labelClass}>Valor</label>
+        <label className={classes.labelClass} id="valor-label">
+          Valor
+        </label>
         <input
+          id="valor"
           type="number"
           step="0.01"
           min="0"
@@ -102,12 +117,16 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, valor: parseFloat(e.target.value) })
           }
+          aria-labelledby="valor-label"
         />
       </div>
 
       <div>
-        <label className={classes.labelClass}>Unidade</label>
+        <label className={classes.labelClass} id="unidade-label">
+          Unidade
+        </label>
         <input
+          id="unidade"
           type="text"
           required
           className={classes.inputClass}
@@ -115,6 +134,7 @@ export function LeituraForm({ leitura, onClose }: LeituraFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, unidade: e.target.value })
           }
+          aria-labelledby="unidade-label"
         />
       </div>
 
