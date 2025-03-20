@@ -22,7 +22,7 @@ Esta é uma API RESTful desenvolvida em Node.js com Express e Sequelize, projeta
 1. **Clone o repositório**
 
    ```bash
-   git clone git@github.com:seu-usuario/EcoMonitor.git
+   git clone git@github.com:MatheusBeniniF/EcoMonitor.git
    cd EcoMonitor
    ```
 
