@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Leitura",
-      timestamps: false, // Desativa as colunas createdAt e updatedAt
-      tableName: "Leituras", // Define o nome da tabela explicitamente
+      timestamps: false,
+      tableName: "Leituras",
     }
   );
   return Leitura;
